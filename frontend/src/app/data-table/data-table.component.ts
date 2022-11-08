@@ -1,10 +1,7 @@
-import {HttpClient} from '@angular/common/http';
 import {Component, ViewChild, AfterViewInit, OnInit} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, SortDirection} from '@angular/material/sort';
+import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import {merge, Observable, of as observableOf} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 
 export interface PeriodicElement {
   name: string;
@@ -38,6 +35,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class DataTableComponent implements OnInit , AfterViewInit{
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  pageSizeOptions: number[] = [5, 10, 25, 100]
+  
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -52,6 +51,16 @@ export class DataTableComponent implements OnInit , AfterViewInit{
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  getPaginatorData(data:any)
+  {
+    console.log(data)
+  }
+
+  getMatSortData(data: any)
+  {
+    console.log(data)
   }
 
 
