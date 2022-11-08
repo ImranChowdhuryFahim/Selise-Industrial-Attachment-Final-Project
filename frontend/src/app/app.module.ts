@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
+import { ProductModule } from './product/product.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -21,7 +22,8 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatIconModule,
     MatButtonModule,
     MatTabsModule,
-    MatBadgeModule
+    MatBadgeModule,
+    ProductModule
 
   ],
   providers: [],

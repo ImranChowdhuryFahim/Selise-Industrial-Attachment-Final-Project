@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { DashboardDefaultComponent } from './dashboard/dashboard-default/dashboard-default.component';
-import { MyCartDefaultComponent } from './my-cart/my-cart-default/my-cart-default.component';
-import { ProductDefaultComponent } from './product/product-default/product-default.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { MyCartComponent } from './my-cart/my-cart.component';
+import { CreateProductComponent } from './product/create-product/create-product.component';
+import { ProductComponent } from './product/product.component';
 
 const routes: Routes = [
-  { path:'dashboard', component:DashboardDefaultComponent },
-  { path:'product', component:ProductDefaultComponent },
-  { path:'my-cart', component:MyCartDefaultComponent },
+  { path:'dashboard', component:DashboardComponent },
+  { path:'product', component:ProductComponent , children: [
+    { path:'create', component: CreateProductComponent },
+    { path:'edit/:productId', component: CreateProductComponent }
+  ]},
+  { path:'my-cart', component:MyCartComponent },
+  { path: '**', redirectTo: 'dashboard'}
 
 ];
 

@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataTableDefaultComponent } from './data-table-default/data-table-default.component';
+import { DataTableComponent } from './data-table.component';
 
 
 
 @NgModule({
   declarations: [
-    DataTableDefaultComponent
+    DataTableComponent
   ],
   imports: [
     CommonModule
