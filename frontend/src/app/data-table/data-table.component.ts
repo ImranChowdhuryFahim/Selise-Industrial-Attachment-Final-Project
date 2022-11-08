@@ -33,7 +33,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./data-table.component.scss']
 })
 export class DataTableComponent implements OnInit , AfterViewInit{
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','edit', 'delete'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   pageSizeOptions: number[] = [10, 25, 100]
   isLoadingResults: boolean = false;
@@ -57,9 +57,15 @@ export class DataTableComponent implements OnInit , AfterViewInit{
   getPaginatorData(data:any)
   {
     console.log(data)
+    this.isLoadingResults = true
   }
 
   getMatSortData(data: any)
+  {
+    console.log(data)
+  }
+
+  edit(data:any)
   {
     console.log(data)
   }
