@@ -35,7 +35,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class DataTableComponent implements OnInit , AfterViewInit{
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
-  pageSizeOptions: number[] = [5, 10, 25, 100]
+  pageSizeOptions: number[] = [10, 25, 100]
+  isLoadingResults: boolean = false;
   
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
