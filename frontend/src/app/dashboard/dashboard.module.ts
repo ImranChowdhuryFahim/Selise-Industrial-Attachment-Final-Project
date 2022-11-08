@@ -10,6 +10,9 @@ import { DashboardDefaultComponent } from './dashboard-default/dashboard-default
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    DashboardDefaultComponent
   ]
 })
 export class DashboardModule { }

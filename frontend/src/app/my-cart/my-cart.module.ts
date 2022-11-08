@@ -10,6 +10,9 @@ import { MyCartDefaultComponent } from './my-cart-default/my-cart-default.compon
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    MyCartDefaultComponent
   ]
 })
 export class MyCartModule { }

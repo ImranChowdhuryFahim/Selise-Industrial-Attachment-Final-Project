@@ -10,6 +10,9 @@ import { ProductDefaultComponent } from './product-default/product-default.compo
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    ProductDefaultComponent
   ]
 })
 export class ProductModule { }
