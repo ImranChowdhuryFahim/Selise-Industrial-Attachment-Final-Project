@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { ProductModule } from './product/product.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { MyCartModule } from './my-cart/my-cart.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -23,7 +24,9 @@ import { ProductModule } from './product/product.module';
     MatButtonModule,
     MatTabsModule,
     MatBadgeModule,
-    ProductModule
+    ProductModule,
+    DashboardModule,
+    MyCartModule,
 
   ],
   providers: [],

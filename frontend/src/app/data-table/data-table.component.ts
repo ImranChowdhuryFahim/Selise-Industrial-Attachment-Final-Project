@@ -65,7 +65,12 @@ export class DataTableComponent implements OnInit , AfterViewInit{
     console.log(data)
   }
 
-  edit(data:any)
+  editData(data:any)
+  {
+    console.log(data)
+  }
+
+  deleteData(data:any)
   {
     console.log(data)
   }

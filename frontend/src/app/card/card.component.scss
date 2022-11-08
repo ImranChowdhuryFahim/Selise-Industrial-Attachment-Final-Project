@@ -1,0 +1,23 @@
+.card {
+    max-width: 250px;
+  }
+
+.counter {
+    display: flex;
+    padding: 10px;
+    button{
+        background-color: #f65280;
+        cursor: pointer;
+        border: none;
+        color: white;
+    }
+
+
+}
+
+mat-card-actions{
+    margin-top: -20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

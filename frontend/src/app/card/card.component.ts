@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CardComponent implements OnInit {
 
+  count:number = 1
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  increment()
+  {
+    this.count +=1
+  }
+  decrement()
+  {
+    this.count -=1
   }
 
 }
