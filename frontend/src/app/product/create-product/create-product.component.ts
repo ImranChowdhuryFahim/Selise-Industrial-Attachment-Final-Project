@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'; 
+import { ActivatedRoute, Router } from '@angular/router'; 
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { InternalService } from 'src/app/service/internal.service';
 import { Product } from 'src/app/models/product';
@@ -16,7 +16,7 @@ export class CreateProductComponent implements OnInit {
     maxDate = new Date()
     categoryOptions:string [] = ['Electronics','Grocery', 'Clothing', 'Footwear', 'Bags']
     originOptions: string [] = ['Canada', 'Bangladesh', 'India', 'China']
-
+    editId!: string
 
     productForm:FormGroup = this.fb.group({
     productName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -33,7 +33,8 @@ export class CreateProductComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private fb:FormBuilder,
      private internalService: InternalService,
-     private backendService: BackendService) { }
+     private backendService: BackendService,
+     private router: Router) { }
   isEdit: boolean = false
 
   ngOnInit(): void {
@@ -42,7 +43,24 @@ export class CreateProductComponent implements OnInit {
       if(params.get('productId'))
       {
         this.isEdit = true
+        this.isLoading = true
+        this.backendService.getSingleProduct(params.get('productId') as string).subscribe((res:Response)=>{
+          if(res.isSuccessful)
+          {
+            
+            this.editId = res.product?._id as string
+            console.log(this.editId)
+            delete res.product?._id
+            this.isLoading = false
+            this.productForm.setValue({...res.product})
+          }
+          else{
+            this.isLoading = false
+          }
+        })
       }
+    },(err)=>{
+      this.isLoading = false
     })
 
    }
@@ -51,24 +69,54 @@ export class CreateProductComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.backendService.createProduct(data).subscribe((res:Response)=>{
+    if(this.isEdit)
+    {
+      const _id = this.editId
+      const newPayload = {_id,...data}
 
-      if(res.isSuccessful)
-      {
+      console.log(newPayload)
+
+      this.backendService.updateProduct(newPayload).subscribe((res:Response)=>{
+        if(res.isSuccessful)
+        {
+          this.internalService.openSnackBar(res.message,2,'blue-snackbar')
+          this.productForm.reset()
+          formDirective.reset()
+          this.router.navigate(['/product'])
+        }
+        else{
+          this.internalService.openSnackBar(res.message,2,'red-snackbar')
+        }
         this.isLoading = false;
-        this.internalService.openSnackBar(res.message,2,'blue-snackbar')
-        this.productForm.reset()
-        formDirective.reset()
-      }
-      else{
+        
+      },(err)=>{
         this.isLoading = false;
-        this.internalService.openSnackBar(res.message,2,'red-snackbar')
-      }
-      
-    },(err)=>{
-      this.isLoading = false;
-      this.internalService.openSnackBar("Could not create a new product",2,'red-snackbar')
-    })    
-   }
+        this.internalService.openSnackBar("Could not update the product",2,'red-snackbar')
+      })
+    }
+
+    else{
+      this.backendService.createProduct(data).subscribe((res:Response)=>{
+
+        
+        if(res.isSuccessful)
+        {
+          this.internalService.openSnackBar(res.message,2,'blue-snackbar')
+          this.productForm.reset()
+          formDirective.reset()
+        }
+        else{
+          this.internalService.openSnackBar(res.message,2,'red-snackbar')
+        }
+        this.isLoading = false;
+        
+      },(err)=>{
+        this.isLoading = false;
+        this.internalService.openSnackBar("Could not create a new product",2,'red-snackbar')
+      })    
+     }
+    }
+
+    
   }
 

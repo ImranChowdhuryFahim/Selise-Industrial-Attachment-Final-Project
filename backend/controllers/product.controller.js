@@ -8,7 +8,7 @@ module.exports = {
     if (!id)
       return res.json({ isSuccessful: false, message: "id is required" });
 
-    const products =await ProductSchema.findById(id);
+    const product =await ProductSchema.findById(id).select('-__v');
 
     if (!product)
       return res.json({ isSuccessful: false, message: "not found" });
@@ -38,7 +38,8 @@ module.exports = {
     const products = await ProductSchema.find()
       .limit(perPage)
       .skip(perPage * page)
-      .sort(sortPayload);
+      .sort(sortPayload)
+      .select("-__v");
 
     if (!products)
       return res.json({ isSuccessful: false, message: "not found" });
