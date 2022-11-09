@@ -9,6 +9,8 @@ const CartSchema = new Schema({
   },
   productId: {
     type: mongoose.Types.ObjectId,
+    required:true,
+    ref:'product'
   },
 });
 
