@@ -10,9 +10,18 @@
         cursor: pointer;
         border: none;
         color: white;
+        border-radius: 2px;
     }
 
 
+}
+
+mat-card-subtitle
+{
+    color: blue;
+}
+mat-card-header{
+    margin-left: -15px;
 }
 
 mat-card-actions{

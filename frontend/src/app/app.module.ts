@@ -11,6 +11,9 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { ProductModule } from './product/product.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MyCartModule } from './my-cart/my-cart.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+
 @NgModule({
   declarations: [
     AppComponent

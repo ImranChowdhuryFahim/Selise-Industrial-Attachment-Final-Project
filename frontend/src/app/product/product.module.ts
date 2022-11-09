@@ -14,6 +14,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -37,10 +40,13 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatCheckboxModule,
     MatIconModule,
     ReactiveFormsModule,
+    MatProgressBarModule,
+    HttpClientModule,
   ],
   providers:[
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSnackBar,
   ]
 })
 export class ProductModule { }

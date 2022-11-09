@@ -1,5 +1,6 @@
-<form class="form-container" [formGroup]="productForm">
 
+<form class="form-container" [formGroup]="productForm" (ngSubmit)="onSubmit(productForm.value,formDirective)" #formDirective="ngForm" >
+    <mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Product Name</mat-label>
@@ -36,7 +37,7 @@
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Price</mat-label>
-            <input type="number" matInput formControlName="price">
+            <input type="number" matInput formControlName="price" min="0">
             <mat-error *ngIf="productForm.get('price')?.hasError('required')">Price is required</mat-error>
             <mat-error *ngIf="productForm.get('price')?.hasError('min')">Price can't be negative</mat-error>
         </mat-form-field>
@@ -74,10 +75,13 @@
         <mat-form-field appearance="legacy">
             <mat-label>Created Date</mat-label>
             <input matInput [matDatepicker]="datepicker" [max]="maxDate" formControlName="createdDate">
-            <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-error *ngIf="productForm.get('createdDate')?.hasError('required')">Created Date is required</mat-error>
+            <mat-error *ngIf="productForm.get('createdDate')?.hasError('matDatepickerMax')">
+                Max date limit is current date
+            </mat-error>
             <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
             <mat-datepicker #datepicker>
+            
         </mat-datepicker>
         </mat-form-field>
     </div> 

@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'; 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { InternalService } from 'src/app/service/internal.service';
+import { Product } from 'src/app/models/product';
+import { BackendService } from 'src/app/service/backend.service';
+import { Response } from 'src/app/models/response';
 @Component({
   selector: 'app-create-product',
   templateUrl: './create-product.component.html',
@@ -8,7 +12,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CreateProductComponent implements OnInit {
   
-    maxDate = Date()
+    isLoading:boolean = false
+    maxDate = new Date()
     categoryOptions:string [] = ['Electronics','Grocery', 'Clothing', 'Footwear', 'Bags']
     originOptions: string [] = ['Canada', 'Bangladesh', 'India', 'China']
 
@@ -26,7 +31,9 @@ export class CreateProductComponent implements OnInit {
     origin: [,[Validators.required]]
   })
 
-  constructor(private route: ActivatedRoute, private fb:FormBuilder) { }
+  constructor(private route: ActivatedRoute, private fb:FormBuilder,
+     private internalService: InternalService,
+     private backendService: BackendService) { }
   isEdit: boolean = false
 
   ngOnInit(): void {
@@ -38,6 +45,30 @@ export class CreateProductComponent implements OnInit {
       }
     })
 
+   }
+
+   onSubmit(data:Product,formDirective:FormGroupDirective){
+
+    this.isLoading = true;
+
+    this.backendService.createProduct(data).subscribe((res:Response)=>{
+
+      if(res.isSuccessful)
+      {
+        this.isLoading = false;
+        this.internalService.openSnackBar(res.message,2,'blue-snackbar')
+        this.productForm.reset()
+        formDirective.reset()
+      }
+      else{
+        this.isLoading = false;
+        this.internalService.openSnackBar(res.message,2,'red-snackbar')
+      }
+      
+    },(err)=>{
+      this.isLoading = false;
+      this.internalService.openSnackBar("Could not create a new product",2,'red-snackbar')
+    })    
    }
   }
 
