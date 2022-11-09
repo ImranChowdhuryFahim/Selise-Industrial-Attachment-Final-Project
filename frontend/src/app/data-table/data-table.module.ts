@@ -8,6 +8,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -23,9 +24,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatSortModule,
     MatIconModule,
     MatButtonModule,
+    RouterModule,
   ],
   exports: [
     DataTableComponent
+  ],
+  providers: [
+    RouterModule
   ]
 })
 export class DataTableModule { }

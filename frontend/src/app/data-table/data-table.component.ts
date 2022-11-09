@@ -1,18 +1,20 @@
-import {Component, ViewChild, AfterViewInit, OnInit} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Route, Router } from '@angular/router';
 
 export interface PeriodicElement {
   name: string;
   position: number;
   weight: number;
   symbol: string;
+  disabled?: boolean;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He',disabled: true},
   {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
   {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
   {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
@@ -42,7 +44,7 @@ export class DataTableComponent implements OnInit , AfterViewInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {}
+  constructor(private route: Router) {}
 
   ngOnInit(): void {
 
@@ -67,12 +69,13 @@ export class DataTableComponent implements OnInit , AfterViewInit{
 
   editData(data:any)
   {
-    console.log(data)
+    this.route.navigate(['/product/edit',1])
   }
 
   deleteData(data:any)
   {
     console.log(data)
+    
   }
 
 

@@ -1,18 +1,21 @@
-<form class="form-container  mat-elevation-z2">
+<form class="form-container" [formGroup]="productForm">
 
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Product Name</mat-label>
-            <input matInput>
-            <mat-hint>Hint</mat-hint>
+        <input matInput #productName formControlName="productName">
+            <mat-hint>{{productName.value.length}}/50</mat-hint>
+            <mat-error *ngIf="productForm.get('productName')?.hasError('required')">Product Name is required</mat-error>
         </mat-form-field>
     </div>
     
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Product Short Code</mat-label>
-            <input matInput>
-            <mat-hint>Hint</mat-hint>
+            <input matInput #productShortCode formControlName="productShortCode">
+            <mat-hint>{{productShortCode.value.length}}/50</mat-hint>
+            <mat-error *ngIf="productForm.get('productShortCode')?.hasError('required')">Product Short Code Name is required</mat-error>
+            
         </mat-form-field>
     </div>
     
@@ -20,12 +23,12 @@
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Category</mat-label>
-            <mat-select formControlName="Category">
-                <mat-option value="hello">
-                hello
+            <mat-select formControlName="category">
+                <mat-option *ngFor="let catop of categoryOptions" [value]="catop">
+                    {{catop}}
                 </mat-option>
             </mat-select>
-            <mat-hint>Hint</mat-hint>
+            <mat-error *ngIf="productForm.get('category')?.hasError('required')">Category is required</mat-error>
         </mat-form-field>
     </div> 
 
@@ -33,24 +36,24 @@
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Price</mat-label>
-            <input type="number" min="0" matInput>
-            <mat-hint>Hint</mat-hint>
+            <input type="number" matInput formControlName="price">
+            <mat-error *ngIf="productForm.get('price')?.hasError('required')">Price is required</mat-error>
+            <mat-error *ngIf="productForm.get('price')?.hasError('min')">Price can't be negative</mat-error>
         </mat-form-field>
     </div>
 
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Description</mat-label>
-            <textarea matInput></textarea>
-            <mat-hint>Hint</mat-hint>
+            <textarea matInput #description formControlName="description"></textarea>
+            <mat-hint>{{description.value.length}}/250</mat-hint>
         </mat-form-field>
     </div>
 
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Image URL</mat-label>
-            <textarea matInput></textarea>
-            <mat-hint>Hint</mat-hint>
+            <textarea matInput formControlName="imageUrl"></textarea>
         </mat-form-field>
     </div>
     
@@ -58,20 +61,21 @@
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Origin</mat-label>
-            <mat-select formControlName="Category">
-                <mat-option value="hello">
-                hello
+            <mat-select formControlName="origin">
+                <mat-option *ngFor="let orgop of originOptions" [value]="orgop">
+                    {{orgop}}
                 </mat-option>
             </mat-select>
-            <mat-hint>Hint</mat-hint>
+            <mat-error *ngIf="productForm.get('origin')?.hasError('required')">Origin is required</mat-error>
         </mat-form-field>
     </div> 
 
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Created Date</mat-label>
-            <input matInput [matDatepicker]="datepicker">
+            <input matInput [matDatepicker]="datepicker" [max]="maxDate" formControlName="createdDate">
             <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-error *ngIf="productForm.get('createdDate')?.hasError('required')">Created Date is required</mat-error>
             <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
             <mat-datepicker #datepicker>
         </mat-datepicker>
@@ -81,18 +85,19 @@
     <div>
         <mat-form-field appearance="legacy">
             <mat-label>Quantity</mat-label>
-            <input type="number" min="0" matInput>
-            <mat-hint>Hint</mat-hint>
+            <input type="number" matInput formControlName="quantity">
+            <mat-error *ngIf="productForm.get('quantity')?.hasError('required')">Quantity is required</mat-error>
+            <mat-error *ngIf="productForm.get('quantity')?.hasError('min')">Quantity can't be 0</mat-error>
         </mat-form-field>
     </div>
 
     <div>
-        <mat-checkbox >Is Best Achieved</mat-checkbox>
+
+    <mat-checkbox formControlName="isBestAchieved" >Is Best Achieved</mat-checkbox>
+        
     </div>
 
-    
-    <button class="create-button" mat-raised-button color="accent" type="submit">Create</button>
-    
+        <button class="create-button" mat-raised-button color="accent" [disabled]="productForm.invalid" type="submit">{{ isEdit? 'Edit': 'Create' }}</button>
 
 </form>
   
