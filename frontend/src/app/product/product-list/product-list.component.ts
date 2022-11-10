@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { dataTable } from 'src/app/models/data-table';
+import { dataConfig } from 'src/app/models/dataConfig';
 import { Product } from 'src/app/models/product';
 import { Response } from 'src/app/models/response';
 import { BackendService } from 'src/app/service/backend.service';
@@ -29,7 +30,7 @@ export class ProductListComponent implements OnInit {
   {display:'Delete',value:'delete'},
 ]
   displayedColumns: string[] = ['productName', 'category', 'price', 'quantity','origin','edit', 'delete'];
-  pageSizeOptions: number[] = [10, 25, 100]
+  pageSizeOptions: number[] = [2,5,10, 25, 100]
   isLoadingResults: boolean = false;
 
   tablePayload: dataTable = {
@@ -37,31 +38,39 @@ export class ProductListComponent implements OnInit {
     dataSources: [],
     displayedColumns: this.displayedColumns,
     displayedCOlumnsSettings: this.displayColumns,
-    pageSizeOptions: [10, 25, 100]
+    pageSizeOptions: [2,5,10, 25, 100],
   }
+
+  dataConfig: dataConfig = { key:'price',order:'asc',perPage:2,page:0}
 
   constructor(private backendService:BackendService) { 
     
-    this.getTransformedData()
-    {
+    this.getTransformedData(this.dataConfig)
 
-    }
 
   }
 
   ngOnInit(): void {
   }
 
-  getTransformedData()
+  getTransformedData(dataConfig:dataConfig)
   {
     this.tablePayload.isLoading = true;
-    this.backendService.loadTransformedProducts().then((res:Response)=>{
+    this.backendService.loadTransformedProducts(dataConfig).then((res:Response)=>{
       if(res.isSuccessful)
       {
+        console.log(res)
+        this.dataConfig.totalLength = res.totalLength
         this.tablePayload.isLoading = false;
         this.tablePayload.dataSources = res.products as Product[];
+        
       }
     })
+  }
+
+  onTableChange(newConfig:dataConfig)
+  {
+    this.getTransformedData(newConfig)
   }
 
 }

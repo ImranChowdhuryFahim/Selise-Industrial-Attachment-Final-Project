@@ -47,6 +47,6 @@
   
     </table>
   
-    <mat-paginator [pageSizeOptions]="dataTablePayload.pageSizeOptions" (page)="getPaginatorData($event)"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="dataTablePayload.pageSizeOptions" [length]="dataConfig.totalLength" (page)="getPaginatorData($event)"></mat-paginator>
 </div>
   

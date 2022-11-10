@@ -32,4 +32,5 @@ export interface Response {
     cartItems?: CartFull[];
     product?: Product;
     products?: Product[];
+    totalLength?: number;
 }

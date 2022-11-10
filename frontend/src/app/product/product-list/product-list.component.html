@@ -3,4 +3,4 @@
     <button mat-raised-button class="add-product-button" routerLink="/product/create" color="accent">Add Product</button>
 </div>
 
-<app-data-table [dataTablePayload]="tablePayload"></app-data-table>
+<app-data-table [dataTablePayload]="tablePayload" [dataConfig]="dataConfig" (tableChange)="onTableChange($event)"></app-data-table>

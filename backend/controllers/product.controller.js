@@ -35,6 +35,8 @@ module.exports = {
   getTransformedProducts: async (req, res, next) => {
     const { key, order, perPage, page } = req.body;
     const sortPayload = { [key]: [order] };
+    const allProducts = await ProductSchema.find();
+    console.log(allProducts.length)
     const products = await ProductSchema.find()
       .limit(perPage)
       .skip(perPage * page)
@@ -48,6 +50,7 @@ module.exports = {
       isSuccessful: true,
       message: "successfully feched the product data",
       products,
+      totalLength:allProducts.length
     });
   },
   createProduct: async (req, res, next) => {

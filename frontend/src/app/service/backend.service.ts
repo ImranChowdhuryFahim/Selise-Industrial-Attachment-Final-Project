@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CartFull } from '../models/cart';
 import { Cart } from '../models/cart-less';
+import { dataConfig } from '../models/dataConfig';
 import { Product } from '../models/product';
 import { Response } from '../models/response';
 
@@ -113,9 +114,9 @@ export class BackendService {
   }
 
 
-  async loadTransformedProducts(): Promise<Response> {
+  async loadTransformedProducts(dataConfig:dataConfig): Promise<Response> {
     return new Promise((resolve,reject)=>{
-      this.getProducts().subscribe((prods:Response)=>{
+      this.getPaginatedandSortedValue(dataConfig).subscribe((prods:Response)=>{
 
         if(prods.isSuccessful)
         {
@@ -140,7 +141,7 @@ export class BackendService {
                   }
                 })
 
-                const successResponse:Response = {isSuccessful:true,message:'successfully fetched', products:newProducts}
+                const successResponse:Response = {isSuccessful:true,message:'successfully fetched', products:newProducts, totalLength:prods.totalLength}
                 resolve(successResponse)
 
               }
@@ -240,5 +241,10 @@ export class BackendService {
   deleteProduct(product:Product): Observable<Response>
   {
     return this.http.delete<Response>(this.BASE_URL+'api/delete-product',{body: product})
+  }
+
+  getPaginatedandSortedValue(dataConfig:dataConfig) : Observable<Response>
+  {
+    return this.http.post<Response>(this.BASE_URL+'api/get-products',dataConfig)
   }
 }

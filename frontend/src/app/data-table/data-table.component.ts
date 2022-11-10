@@ -1,15 +1,25 @@
-import { Component, ViewChild, OnInit, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Route, Router } from '@angular/router';
 import { dataTable } from '../models/data-table';
+import { dataConfig } from '../models/dataConfig';
 import { Product } from '../models/product';
 import { Response } from '../models/response';
 import { BackendService } from '../service/backend.service';
 import { InternalService } from '../service/internal.service';
 
+export interface paginatorConfig{
+  previousPageIndex?: number;
+  pageIndex?: number;
+  pageSize?: number;
+  length?: number;
+}
 
-
+export interface sortConfig{
+  active?: string;
+  direction?: string;
+}
 
 /**
  * @title Table retrieving data through HTTP
@@ -22,8 +32,11 @@ import { InternalService } from '../service/internal.service';
 export class DataTableComponent implements OnInit {
 
   @Input() dataTablePayload!: dataTable;
+  @Input() dataConfig!: dataConfig
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  @Output() tableChange:EventEmitter<dataConfig> = new EventEmitter<dataConfig>()
 
   isLoading:boolean = false;
 
@@ -35,15 +48,22 @@ export class DataTableComponent implements OnInit {
   }
 
 
-  getPaginatorData(data:any)
+  getPaginatorData(paginatorData:paginatorConfig)
   {
-    console.log(data)
-    this.dataTablePayload.isLoading = true
+    let newConfig:dataConfig = this.dataConfig
+    newConfig.page = paginatorData.pageIndex as number; 
+    newConfig.perPage = paginatorData.pageSize as number;
+
+    this.tableChange.emit(newConfig);
   }
 
-  getMatSortData(data: any)
+  getMatSortData(sortData: sortConfig)
   {
-    console.log(data)
+    let newConfig:dataConfig = this.dataConfig
+    newConfig.key = sortData.active as string; 
+    newConfig.order = sortData.direction as string;
+
+    this.tableChange.emit(newConfig);
   }
 
 
@@ -53,7 +73,7 @@ export class DataTableComponent implements OnInit {
     this.backendService.deleteProduct(data).subscribe((res:Response)=>{
       if(res.isSuccessful)
       {
-        this.backendService.loadTransformedProducts().then((res:Response)=>{
+        this.backendService.loadTransformedProducts(this.dataConfig).then((res:Response)=>{
           if(res.isSuccessful)
           {
             this.dataTablePayload.isLoading = false;
