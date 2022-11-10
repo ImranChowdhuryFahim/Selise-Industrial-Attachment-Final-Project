@@ -9,7 +9,7 @@ const productValidation = (data) => {
     price: Joi.number().required(),
     quantity: Joi.number().required(),
     description: Joi.string().min(3).max(250).allow(''),
-    imageUrl: Joi.string().min(3).max(250),
+    imageUrl: Joi.string().min(3).max(250).allow(''),
     isBestAchieved: Joi.boolean().required(),
     createdDate: Joi.date(),
     origin: Joi.string().required(),

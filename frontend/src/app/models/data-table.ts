@@ -1,4 +1,4 @@
-export interface Product {
+interface Product {
     _id?:string;
     productName: string;
     productShortCode: string;
@@ -13,12 +13,15 @@ export interface Product {
     disabled?: boolean;
 }
 
-export interface Cart {
-    _id?:string;
-    productId: Product;
-    quantity:number;
+interface tableColumn{
+    display:string;
+    value:string;
+  }
+
+export interface dataTable{
+    dataSources: Product[];
+    displayedColumns: string[];
+    displayedCOlumnsSettings: tableColumn[];
+    isLoading: boolean;
+    pageSizeOptions: number[];
 }
-
-
-
-

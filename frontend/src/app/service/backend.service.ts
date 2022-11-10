@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CartFull } from '../models/cart';
 import { Cart } from '../models/cart-less';
 import { Product } from '../models/product';
 import { Response } from '../models/response';
@@ -111,6 +112,44 @@ export class BackendService {
 
   }
 
+
+  async loadTransformedProducts(): Promise<Response> {
+    return new Promise((resolve,reject)=>{
+      this.getProducts().subscribe((prods:Response)=>{
+
+        if(prods.isSuccessful)
+        {
+          this.getCartItems().subscribe((carts:Response)=>{
+              if(carts.isSuccessful)
+              {
+                let cartProductIds:string[] = []
+                for(let cart of carts.cartItems as CartFull[])
+                {
+                  cartProductIds.push(cart.productId._id as string)
+                }
+
+                let newProducts = prods.products;
+                newProducts?.map((product)=>{
+                  if(cartProductIds.includes(product._id as string))
+                  {
+                    return product.disabled = true;
+                  }
+                  else
+                  {
+                    return product
+                  }
+                })
+
+                const successResponse:Response = {isSuccessful:true,message:'successfully fetched', products:newProducts}
+                resolve(successResponse)
+
+              }
+          })
+        }
+      })
+    })
+  }
+
   async addToCard(res:(Cart|Product)[]): Promise<Response>{
 
     const cartPayload = res[0] as Cart
@@ -196,5 +235,10 @@ export class BackendService {
   getCartItemsCount(): Observable<number>
   {
     return this.cartItemsCount
+  }
+
+  deleteProduct(product:Product): Observable<Response>
+  {
+    return this.http.delete<Response>(this.BASE_URL+'api/delete-product',{body: product})
   }
 }

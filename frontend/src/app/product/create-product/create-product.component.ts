@@ -56,6 +56,8 @@ export class CreateProductComponent implements OnInit {
           }
           else{
             this.isLoading = false
+            this.internalService.openSnackBar("not found",2,'red-snackbar')
+            this.router.navigate(['/product'])
           }
         })
       }

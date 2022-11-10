@@ -8,16 +8,16 @@ module.exports = {
     if (!id)
       return res.json({ isSuccessful: false, message: "id is required" });
 
-    const product =await ProductSchema.findById(id).select('-__v');
-
-    if (!product)
+    ProductSchema.findById(id).select('-__v').then((result)=>{
+      console.log(result)
+      return res.send({
+        isSuccessful: true,
+        message: "successfully feched the product data",
+        product:result,
+      })
+    }).catch((err)=>{
       return res.json({ isSuccessful: false, message: "not found" });
-
-    return res.send({
-      isSuccessful: true,
-      message: "successfully feched the product data",
-      product,
-    });
+    })
 
   },
   getProducts: async (req, res, next) => {

@@ -1,29 +1,14 @@
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { Route, Router } from '@angular/router';
+import { dataTable } from '../models/data-table';
+import { Product } from '../models/product';
+import { Response } from '../models/response';
+import { BackendService } from '../service/backend.service';
+import { InternalService } from '../service/internal.service';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  disabled?: boolean;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He',disabled: true},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
 
 
 /**
@@ -34,32 +19,26 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent implements OnInit , AfterViewInit{
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','edit', 'delete'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
-  pageSizeOptions: number[] = [10, 25, 100]
-  isLoadingResults: boolean = false;
-  
+export class DataTableComponent implements OnInit {
 
+  @Input() dataTablePayload!: dataTable;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private route: Router) {}
+  isLoading:boolean = false;
+
+  constructor(private route: Router,private backendService:BackendService,private internalService:InternalService) {}
 
   ngOnInit(): void {
 
       
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
 
   getPaginatorData(data:any)
   {
     console.log(data)
-    this.isLoadingResults = true
+    this.dataTablePayload.isLoading = true
   }
 
   getMatSortData(data: any)
@@ -67,14 +46,24 @@ export class DataTableComponent implements OnInit , AfterViewInit{
     console.log(data)
   }
 
-  editData(data:any)
-  {
-    this.route.navigate(['/product/edit',1])
-  }
 
-  deleteData(data:any)
+  deleteData(data:Product)
   {
-    console.log(data)
+    this.dataTablePayload.isLoading = true;
+    this.backendService.deleteProduct(data).subscribe((res:Response)=>{
+      if(res.isSuccessful)
+      {
+        this.backendService.loadTransformedProducts().then((res:Response)=>{
+          if(res.isSuccessful)
+          {
+            this.dataTablePayload.isLoading = false;
+            this.dataTablePayload.dataSources = res.products as Product[];
+
+            this.internalService.openSnackBar('successfully deleted',2,'blue-snackbar')
+          }
+        })
+      }
+    })
     
   }
 

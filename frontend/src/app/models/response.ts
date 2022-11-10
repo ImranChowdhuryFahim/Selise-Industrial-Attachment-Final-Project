@@ -10,6 +10,7 @@ interface Product {
     isBestAchieved: boolean;
     createdDate: Date;
     origin: string;
+    disabled?: boolean;
 }
 
 interface Cart {
