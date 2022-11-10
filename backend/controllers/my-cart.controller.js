@@ -3,7 +3,7 @@ const { cartValidation } = require("../helpers/my-cart.validation");
 
 module.exports = {
   getCartItems: async (req, res, next) => {
-    const cartItems = await CartSchema.find().populate("productId");
+    const cartItems = await CartSchema.find().populate("productId","-__v").select('-__v');
 
     if (!cartItems)
       return res.json({ isSuccessful: false, message: "not found" });
@@ -76,10 +76,14 @@ module.exports = {
   },
 
   deleteCartItem: async (req, res, next) => {
-    if (!req.body._id)
-      return res.json({ isSuccessful: false, message: "id is required" });
+    const { error } = cartValidation(req.body);
+    if (error)
+      return res.json({
+        isSuccessful: false,
+        message: error.details[0].message,
+      });
 
-    CartSchema.findByIdAndDelete(req.body._id)
+    CartSchema.findOneAndDelete({productId:req.body.productId})
       .then(() => {
         return res.json({
           isSuccessful: true,

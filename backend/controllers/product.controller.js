@@ -2,7 +2,7 @@ const ProductSchema = require("../models/product.model");
 const { productValidation } = require("../helpers/product.validation");
 
 module.exports = {
-  getSingleProduct: async (req, res, next) => {
+  findProduct: async (req, res, next) => {
     const id = req.params.id;
 
     if (!id)

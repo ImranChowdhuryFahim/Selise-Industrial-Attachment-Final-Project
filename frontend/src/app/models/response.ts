@@ -18,11 +18,17 @@ interface Cart {
     quantity:number;
 }
 
+interface CartFull {
+    _id?:string;
+    productId: Product;
+    quantity:number;
+}
+
 export interface Response {
     isSuccessful: boolean;
     message: string;
     alreadyExist?:boolean;
-    cartItems?: Cart[];
+    cartItems?: CartFull[];
     product?: Product;
     products?: Product[];
 }

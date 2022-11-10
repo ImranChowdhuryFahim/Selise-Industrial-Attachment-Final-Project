@@ -5,7 +5,7 @@ const controller = require('../controllers/product.controller');
 const router = express.Router();
 
 router.route('/api/create-product').post(controller.createProduct);
-router.route('/api/get-single-product/:id').get(controller.getSingleProduct);
+router.route('/api/find-product/:id').get(controller.findProduct);
 router.route('/api/get-products').get(controller.getProducts);
 router.route('/api/get-products').post(controller.getTransformedProducts);
 router.route('/api/update-product').put(controller.updateProduct);

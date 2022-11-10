@@ -12,7 +12,7 @@ interface Product {
     origin: string;
 }
 
-export interface Cart {
+export interface CartFull {
     _id?:string;
     productId: Product;
     quantity:number;

@@ -22,8 +22,8 @@ export class BackendService {
     return this.http.post<Response>(this.BASE_URL+'api/create-product/',product)
   }
 
-  getSingleProduct(id:string): Observable<Response> {
-    return this.http.get<Response>(this.BASE_URL+'api/get-single-product/'+id)
+  findProduct(id:string): Observable<Response> {
+    return this.http.get<Response>(this.BASE_URL+'api/find-product/'+id)
   }
 
   updateProduct(product:Product): Observable<Response>  {
@@ -33,6 +33,82 @@ export class BackendService {
   getProducts() : Observable<Response>
   {
     return this.http.get<Response>(this.BASE_URL+'api/get-products/')
+  }
+
+
+  async editCart(res:(Cart|Product)[]): Promise<Response>{
+    const cartPayload = res[0] as Cart
+    const productPayload = res[1] as Product
+
+    return new Promise((resolve,reject)=>{
+
+      this.updateCartItem(cartPayload).subscribe((updatedCart)=>{
+        if(updatedCart.isSuccessful)
+        {
+          this.updateProduct(productPayload).subscribe((updatedProduct)=>{
+            if(updatedProduct.isSuccessful)
+            {
+              const successResponse:Response = {isSuccessful:true,message:updatedCart.message}
+              resolve(successResponse)
+            }
+            else{
+              const erroResponse:Response = {isSuccessful:false,message:updatedProduct.message}
+              resolve(erroResponse)
+            } 
+          })
+
+        }
+        else{
+          const erroResponse:Response = {isSuccessful:false,message:updatedCart.message}
+          resolve(erroResponse)
+        }
+        
+      })
+
+    })
+
+
+  }
+
+
+  async deleteCart(res:(Cart|Product)[]): Promise<Response>{
+    const cartPayload = res[0] as Cart
+    const productPayload = res[1] as Product
+
+    return new Promise((resolve,reject)=>{
+
+      this.deleteCartItem(cartPayload).subscribe((deletedCart)=>{
+        if(deletedCart.isSuccessful)
+        {
+          this.updateProduct(productPayload).subscribe((updatedProduct)=>{
+            if(updatedProduct.isSuccessful)
+            {
+              this.getCartItems().subscribe((cartItems)=>{
+                if(cartItems.isSuccessful)
+                {
+                  const successResponse:Response = {isSuccessful:true,message:deletedCart.message,cartItems:cartItems.cartItems}
+                  resolve(successResponse)
+                  this.cartItemsCount.next(this.cartItemsCount.value-1)
+                }
+              })
+            }
+            else{
+              const erroResponse:Response = {isSuccessful:false,message:updatedProduct.message}
+              resolve(erroResponse)
+            } 
+          })
+
+        }
+        else{
+          const erroResponse:Response = {isSuccessful:false,message:deletedCart.message}
+          resolve(erroResponse)
+        }
+        
+      })
+
+    })
+
+
   }
 
   async addToCard(res:(Cart|Product)[]): Promise<Response>{
@@ -94,6 +170,11 @@ export class BackendService {
     })
 
     
+  }
+
+  deleteCartItem(cart:Cart):Observable<Response>
+  {
+    return this.http.delete<Response>(this.BASE_URL+'api/delete-cart-item',{body:cart})
   }
 
   updateCartItem(cart:Cart): Observable<Response>

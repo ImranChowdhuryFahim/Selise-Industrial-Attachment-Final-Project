@@ -9,17 +9,23 @@ import { Product } from '../models/product';
 })
 export class CardComponent implements OnInit {
 
-
-  clicked:boolean = false;
-  editModeClicked:boolean = false;
   @Input() cardPayload!:Product
   @Input() editCart!:boolean
+  @Input() quantity:number = 0
   @Output() onCartClick:EventEmitter<(Cart|Product)[]> = new EventEmitter<(Cart|Product)[]>()
+  @Output() deleteEvent:EventEmitter<(Cart|Product)[]> = new EventEmitter<(Cart|Product)[]>()
+  @Output() editEvent:EventEmitter<(Cart|Product)[]> = new EventEmitter<(Cart|Product)[]>()
 
   count:number = 0
-  constructor() { }
+  constructor() {
+
+   }
 
   ngOnInit(): void {
+    if(this.quantity!==0)
+    {
+      this.count = this.quantity
+    }
   }
 
   increment()
@@ -28,25 +34,53 @@ export class CardComponent implements OnInit {
     {
       this.cardPayload.quantity -=1
       this.count +=1
+      let quantity = this.count
+      let productId = this.cardPayload._id as string
+      this.editEvent.emit([{quantity,productId},this.cardPayload])
     }
 
   }
   decrement()
   {
-    if(this.count>0)
+    if(this.editCart)
     {
-      this.count -=1
-      this.cardPayload.quantity +=1
+      if(this.count>1)
+      {
+        this.count -=1
+        this.cardPayload.quantity +=1
+        let quantity = this.count
+        let productId = this.cardPayload._id as string
+        this.editEvent.emit([{quantity,productId},this.cardPayload])
+      }
     }
+    else{
+      if(this.count>0)
+      {
+        this.count -=1
+        this.cardPayload.quantity +=1
+        let quantity = this.count
+        let productId = this.cardPayload._id as string
+        this.editEvent.emit([{quantity,productId},this.cardPayload])
+      }
+    }
+
 
   }
 
   addToCart()
   {
-    this.clicked = true;
     let quantity = this.count
     let productId = this.cardPayload._id as string
     this.onCartClick.emit([{quantity,productId},this.cardPayload]);
   }
+
+  deleteCart()
+  {
+     let quantity = this.count
+     let productId = this.cardPayload._id as string
+     this.cardPayload.quantity += quantity
+     this.deleteEvent.emit([{quantity,productId},this.cardPayload])
+  }
+
 
 }

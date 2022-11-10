@@ -44,7 +44,7 @@ export class CreateProductComponent implements OnInit {
       {
         this.isEdit = true
         this.isLoading = true
-        this.backendService.getSingleProduct(params.get('productId') as string).subscribe((res:Response)=>{
+        this.backendService.findProduct(params.get('productId') as string).subscribe((res:Response)=>{
           if(res.isSuccessful)
           {
             
