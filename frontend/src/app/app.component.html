@@ -10,7 +10,7 @@
   <a mat-button routerLink="/my-cart" routerLinkActive="active">My Cart</a>
   <span class="example-spacer"></span>
 
-  <button mat-icon-button>
+  <button mat-icon-button (click)="cartIconClick()">
     <mat-icon mat-button [matBadge]="cartItemsCount" [matBadgeDisabled]="cartItemsCount===0" matBadgeColor="warn">add_shopping_cart</mat-icon>
   </button>
 

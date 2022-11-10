@@ -12,12 +12,17 @@ import { ProductModule } from './product/product.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MyCartModule } from './my-cart/my-cart.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import {MatDialogModule} from '@angular/material/dialog';
+import { DialogComponent } from './dialog/dialog.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CardModule } from './card/card.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DialogComponent
   ],
+  entryComponents:[DialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -30,6 +35,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ProductModule,
     DashboardModule,
     MyCartModule,
+    MatDialogModule,
+    MatProgressBarModule,
+    CardModule,
 
   ],
   providers: [],
