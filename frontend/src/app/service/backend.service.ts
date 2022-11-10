@@ -13,7 +13,7 @@ import { Response } from '../models/response';
 export class BackendService {
   private cartItemsCount:BehaviorSubject<number> = new BehaviorSubject<number>(0)
 
-  BASE_URL = 'http://127.0.0.1:5000/'
+  BASE_URL = ''
 
   constructor(private http:HttpClient) { this.getCartItems().subscribe((res:Response)=>{
     this.cartItemsCount.next(res.cartItems?.length as number)
