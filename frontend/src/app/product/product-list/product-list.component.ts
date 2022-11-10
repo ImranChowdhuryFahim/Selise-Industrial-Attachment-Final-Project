@@ -41,7 +41,7 @@ export class ProductListComponent implements OnInit {
     pageSizeOptions: [2,5,10, 25, 100],
   }
 
-  dataConfig: dataConfig = { key:'price',order:'asc',perPage:2,page:0}
+  dataConfig: dataConfig = { key:'price',order:'asc',perPage:5,page:0}
 
   constructor(private backendService:BackendService) { 
     

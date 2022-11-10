@@ -106,6 +106,7 @@ export class CreateProductComponent implements OnInit {
           this.internalService.openSnackBar(res.message,2,'blue-snackbar')
           this.productForm.reset()
           formDirective.reset()
+          this.router.navigate(['/product'])
         }
         else{
           this.internalService.openSnackBar(res.message,2,'red-snackbar')

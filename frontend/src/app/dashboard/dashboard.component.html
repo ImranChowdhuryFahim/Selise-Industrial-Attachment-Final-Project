@@ -2,8 +2,9 @@
     <mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>
 
     <!-- show only available product -->
-    <ng-container *ngFor="let product of products">
-        <app-card  *ngIf="product.quantity!==0" [cardPayload]="product" [editCart]="false" (onCartClick)="addToCart($event)" ></app-card>
+
+    <ng-container  >
+        <app-card *ngFor="let product of products"  [cardPayload]="product" [editCart]="false" (onCartClick)="addToCart($event)" ></app-card>
     </ng-container>
     
 </div>
