@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Cart } from '../models/cart-less';
 import { Product } from '../models/product';
 import { Response } from '../models/response';
 
@@ -12,7 +13,9 @@ export class BackendService {
 
   BASE_URL = 'http://127.0.0.1:5000/'
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) { this.getCartItems().subscribe((res:Response)=>{
+    this.cartItemsCount.next(res.cartItems?.length as number)
+  }) }
 
   createProduct(product:Product): Observable<Response>
   {
@@ -32,9 +35,82 @@ export class BackendService {
     return this.http.get<Response>(this.BASE_URL+'api/get-products/')
   }
 
-  addToCard(){
-    this.cartItemsCount.next(this.cartItemsCount.value+1)
+  async addToCard(res:(Cart|Product)[]): Promise<Response>{
+
+    const cartPayload = res[0] as Cart
+    const productPayload = res[1] as Product
+
+    return new Promise((resolve, reject) => {
+
+          this.addItemToCart(cartPayload).subscribe((updatedCart)=>{
+            if(updatedCart.isSuccessful)
+            {
+              this.updateProduct(productPayload).subscribe((updatedProduct)=>{
+                if(updatedProduct.isSuccessful)
+                {
+                  const successResponse:Response = {isSuccessful:true,message:updatedCart.message}
+                  this.cartItemsCount.next(this.cartItemsCount.value+1)
+                  resolve(successResponse)
+                }
+                else{
+                  const erroResponse:Response = {isSuccessful:false,message:updatedProduct.message}
+                  resolve(erroResponse)
+                } 
+              })
+
+            }
+            else if(!updatedCart.isSuccessful && updatedCart.alreadyExist)
+            {
+              this.updateCartItem(cartPayload).subscribe((updatedCart)=>{
+                if(updatedCart.isSuccessful)
+                {
+                  this.updateProduct(productPayload).subscribe((updatedProduct)=>{
+                    if(updatedProduct.isSuccessful)
+                    {
+                      const successResponse:Response = {isSuccessful:true,message:updatedCart.message}
+                      resolve(successResponse)
+                    }
+                    else{
+                      const erroResponse:Response = {isSuccessful:false,message:updatedProduct.message}
+                      resolve(erroResponse)
+                    } 
+                  })
+                }
+                else{
+                  const erroResponse:Response = {isSuccessful:false,message:updatedCart.message}
+                  resolve(erroResponse)
+                }
+              })
+              
+            }
+            else{
+              const erroResponse:Response = {isSuccessful:false,message:updatedCart.message}
+              resolve(erroResponse)
+            }
+            
+          })
+        
+      
+    })
+
+    
   }
+
+  updateCartItem(cart:Cart): Observable<Response>
+  {
+    return this.http.put<Response>(this.BASE_URL+'api/update-cart-item',cart)
+  }
+
+  getCartItems(): Observable<Response>
+  {
+    return this.http.get<Response>(this.BASE_URL + 'api/get-cart-items')
+  }
+
+  addItemToCart(cart:Cart): Observable<Response>
+  {
+    return this.http.post<Response>(this.BASE_URL+'api/add-cart-item/',cart)
+  }
+
 
   getCartItemsCount(): Observable<number>
   {

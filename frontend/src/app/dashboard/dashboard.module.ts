@@ -4,6 +4,7 @@ import { RouterModule,Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { CardModule } from '../card/card.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -17,5 +18,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     CardModule,
     MatProgressBarModule,
   ],
+  providers:[
+    MatSnackBar
+  ]
 })
 export class DashboardModule { }

@@ -3,7 +3,7 @@
 
     <!-- show only available product -->
     <ng-container *ngFor="let product of products">
-        <app-card  *ngIf="product.quantity!==0" [cardPayload]="product" (onCartClick)="addToCart($event)" ></app-card>
+        <app-card  *ngIf="product.quantity!==0" [cardPayload]="product" [editCart]="false" (onCartClick)="addToCart($event)" ></app-card>
     </ng-container>
     
 </div>

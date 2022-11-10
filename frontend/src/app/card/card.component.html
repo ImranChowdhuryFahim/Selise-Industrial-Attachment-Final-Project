@@ -18,7 +18,11 @@
             {{count}}
             <button style="margin-left: 5px;" (click)="decrement()">-</button>
         </div>
-        <button mat-raised-button color="primary" [disabled]="count===0" (click)="addToCart()">Add to Cart</button>
+        <button *ngIf="!editCart;else delete" mat-raised-button color="primary" [disabled]="count===0" (click)="addToCart()">Add to Cart</button>
+        <ng-template #delete>
+          <button mat-raised-button color="warn">Delete Cart Item</button>
+        </ng-template>
+        
  
     </mat-card-actions>
   </mat-card>

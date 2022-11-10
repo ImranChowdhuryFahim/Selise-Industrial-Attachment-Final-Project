@@ -23,6 +23,18 @@ module.exports = {
         message: error.details[0].message,
       });
 
+      const alreadyExist = await CartSchema.findOne({
+        productId:req.body.productId
+      });
+
+
+    if (alreadyExist!==null)
+      return res.json({
+        isSuccessful: false,
+        alreadyExist: true,
+        message: "product already exist in cart",
+      });
+
     let newCartItem = new CartSchema(req.body);
     await newCartItem
       .save()
@@ -48,13 +60,7 @@ module.exports = {
         message: error.details[0].message,
       });
 
-    if (!req.body._id)
-      return res.json({ isSuccessful: false, message: "id is required" });
-
-    CartSchema.findByIdAndUpdate(
-      req.body._id,
-      { quantity: req.body.quantity },
-    )
+    CartSchema.findOneAndUpdate({productId:req.body.productId}, { quantity: req.body.quantity })
       .then((product) => {
         return res.json({
           isSuccessful: true,

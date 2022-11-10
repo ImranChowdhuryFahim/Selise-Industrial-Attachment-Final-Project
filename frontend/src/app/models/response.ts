@@ -11,9 +11,18 @@ interface Product {
     createdDate: Date;
     origin: string;
 }
+
+interface Cart {
+    _id?:string;
+    productId: string;
+    quantity:number;
+}
+
 export interface Response {
     isSuccessful: boolean;
     message: string;
-    product?: Product
-    products?: Product[]
+    alreadyExist?:boolean;
+    cartItems?: Cart[];
+    product?: Product;
+    products?: Product[];
 }

@@ -9,8 +9,12 @@ import { Product } from '../models/product';
 })
 export class CardComponent implements OnInit {
 
+
+  clicked:boolean = false;
+  editModeClicked:boolean = false;
   @Input() cardPayload!:Product
-  @Output() onCartClick:EventEmitter<Cart> = new EventEmitter<Cart>()
+  @Input() editCart!:boolean
+  @Output() onCartClick:EventEmitter<(Cart|Product)[]> = new EventEmitter<(Cart|Product)[]>()
 
   count:number = 0
   constructor() { }
@@ -39,9 +43,10 @@ export class CardComponent implements OnInit {
 
   addToCart()
   {
+    this.clicked = true;
     let quantity = this.count
     let productId = this.cardPayload._id as string
-    this.onCartClick.emit({quantity,productId});
+    this.onCartClick.emit([{quantity,productId},this.cardPayload]);
   }
 
 }
