@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule,Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { CardModule } from '../card/card.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
@@ -14,6 +15,7 @@ import { CardModule } from '../card/card.module';
     CommonModule,
     RouterModule,
     CardModule,
+    MatProgressBarModule,
   ],
 })
 export class DashboardModule { }

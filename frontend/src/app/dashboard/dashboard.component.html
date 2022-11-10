@@ -1,3 +1,9 @@
 <div class="display-product">
-    <app-card *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"></app-card>
+    <mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>
+
+    <!-- show only available product -->
+    <ng-container *ngFor="let product of products">
+        <app-card  *ngIf="product.quantity!==0" [cardPayload]="product" (onCartClick)="addToCart($event)" ></app-card>
+    </ng-container>
+    
 </div>

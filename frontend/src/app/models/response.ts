@@ -15,4 +15,5 @@ export interface Response {
     isSuccessful: boolean;
     message: string;
     product?: Product
+    products?: Product[]
 }

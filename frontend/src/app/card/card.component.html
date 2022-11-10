@@ -1,24 +1,24 @@
-<mat-card class="card">
+<mat-card class="card" >
     <mat-card-header>
-      <mat-card-title>Shiba Inu</mat-card-title>
-      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      <mat-card-title>{{cardPayload.productName}}</mat-card-title>
+      <mat-card-subtitle>{{cardPayload.price}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-xl-image src="https://adminapi.applegadgetsbd.com/storage/media/large/3710-10824.jpg" alt="Photo of a Shiba Inu">
+    <img mat-card-xl-image [src]="cardPayload.imageUrl" alt="Photo of the product">
     <mat-card-content>
         <p>
-            Macbook Pro 14 inch
+            {{cardPayload.description}}
         </p>
       <p>
-       Quantity:
+       Quantity: {{cardPayload.quantity}}
       </p>
     </mat-card-content>
     <mat-card-actions>
         <div class="counter">
-            <button style="margin-right: 5px;" (click)="increment()">+</button>
-             {{count}}
+            <button style="margin-right: 5px;" [disabled]="cardPayload.quantity==0" (click)="increment()">+</button>
+            {{count}}
             <button style="margin-left: 5px;" (click)="decrement()">-</button>
         </div>
-        <button mat-raised-button color="primary">Add to Cart</button>
+        <button mat-raised-button color="primary" [disabled]="count===0" (click)="addToCart()">Add to Cart</button>
  
     </mat-card-actions>
   </mat-card>

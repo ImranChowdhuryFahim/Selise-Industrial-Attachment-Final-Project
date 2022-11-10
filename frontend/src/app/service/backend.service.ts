@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Product } from '../models/product';
 import { Response } from '../models/response';
 
@@ -8,6 +8,7 @@ import { Response } from '../models/response';
   providedIn: 'root'
 })
 export class BackendService {
+  private cartItemsCount:BehaviorSubject<number> = new BehaviorSubject<number>(0)
 
   BASE_URL = 'http://127.0.0.1:5000/'
 
@@ -24,5 +25,19 @@ export class BackendService {
 
   updateProduct(product:Product): Observable<Response>  {
     return this.http.put<Response>(this.BASE_URL+'api/update-product/',product)
+  }
+
+  getProducts() : Observable<Response>
+  {
+    return this.http.get<Response>(this.BASE_URL+'api/get-products/')
+  }
+
+  addToCard(){
+    this.cartItemsCount.next(this.cartItemsCount.value+1)
+  }
+
+  getCartItemsCount(): Observable<number>
+  {
+    return this.cartItemsCount
   }
 }
