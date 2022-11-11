@@ -14,7 +14,11 @@ export class DashboardComponent implements OnInit {
   isLoading:boolean = false
   products:Product[] = []
 
-  constructor(private backendService: BackendService,private internalService:InternalService) { }
+  constructor(private backendService: BackendService,private internalService:InternalService) {
+    this.backendService.products.subscribe((products:Product[])=>{
+      this.products = products
+    })
+   }
 
   ngOnInit(): void {
     this.isLoading = true;

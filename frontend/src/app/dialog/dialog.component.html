@@ -1,9 +1,9 @@
 <title mat-dialog-title>Cart Items</title>
-
+<mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>
 
 <mat-dialog-content>
 
-        <mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>
+        
         <app-card *ngFor="let cart of cartItems" [cardPayload]="cart.productId" [editCart]="true" [quantity]="cart.quantity" (editEvent)="editCart($event)" (deleteEvent)="deleteCart($event)"></app-card>
 
 </mat-dialog-content>

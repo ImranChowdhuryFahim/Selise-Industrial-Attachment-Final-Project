@@ -1,9 +1,9 @@
-const CartSchema = require("../models/my-cart.model");
+const CartModel = require("../models/my-cart.model");
 const { cartValidation } = require("../helpers/my-cart.validation");
 
 module.exports = {
   getCartItems: async (req, res, next) => {
-    const cartItems = await CartSchema.find().populate("productId","-__v").select('-__v');
+    const cartItems = await CartModel.find().populate("productId","-__v").select('-__v');
 
     if (!cartItems)
       return res.json({ isSuccessful: false, message: "not found" });
@@ -23,7 +23,7 @@ module.exports = {
         message: error.details[0].message,
       });
 
-      const alreadyExist = await CartSchema.findOne({
+      const alreadyExist = await CartModel.findOne({
         productId:req.body.productId
       });
 
@@ -35,7 +35,7 @@ module.exports = {
         message: "product already exist in cart",
       });
 
-    let newCartItem = new CartSchema(req.body);
+    let newCartItem = new CartModel(req.body);
     await newCartItem
       .save()
       .then(() => {
@@ -60,7 +60,7 @@ module.exports = {
         message: error.details[0].message,
       });
 
-    CartSchema.findOneAndUpdate({productId:req.body.productId}, { quantity: req.body.quantity })
+      CartModel.findOneAndUpdate({productId:req.body.productId}, { quantity: req.body.quantity })
       .then((product) => {
         return res.json({
           isSuccessful: true,
@@ -83,7 +83,7 @@ module.exports = {
         message: error.details[0].message,
       });
 
-    CartSchema.findOneAndDelete({productId:req.body.productId})
+      CartModel.findOneAndDelete({productId:req.body.productId})
       .then(() => {
         return res.json({
           isSuccessful: true,

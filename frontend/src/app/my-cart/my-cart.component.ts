@@ -25,6 +25,9 @@ export class MyCartComponent implements OnInit {
         this.cartItems = res.cartItems as CartFull[];
       }
     })
+    this.backendService.cartItems.subscribe((cartItems:CartFull[])=>{
+      this.cartItems = cartItems
+    })
   }
 
   ngOnInit(): void {

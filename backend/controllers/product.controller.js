@@ -1,4 +1,4 @@
-const ProductSchema = require("../models/product.model");
+const ProductModel = require("../models/product.model");
 const { productValidation } = require("../helpers/product.validation");
 
 module.exports = {
@@ -8,8 +8,8 @@ module.exports = {
     if (!id)
       return res.json({ isSuccessful: false, message: "id is required" });
 
-    ProductSchema.findById(id).select('-__v').then((result)=>{
-      console.log(result)
+      ProductModel.findById(id).select('-__v').then((result)=>{
+
       return res.send({
         isSuccessful: true,
         message: "successfully feched the product data",
@@ -21,7 +21,7 @@ module.exports = {
 
   },
   getProducts: async (req, res, next) => {
-    const products = await ProductSchema.find().select("-__v");
+    const products = await ProductModel.find().select("-__v");
 
     if (!products)
       return res.json({ isSuccessful: false, message: "not found" });
@@ -35,9 +35,9 @@ module.exports = {
   getTransformedProducts: async (req, res, next) => {
     const { key, order, perPage, page } = req.body;
     const sortPayload = { [key]: [order] };
-    const allProducts = await ProductSchema.find();
-    console.log(allProducts.length)
-    const products = await ProductSchema.find()
+    const allProducts = await ProductModel.find();
+
+    const products = await ProductModel.find()
       .limit(perPage)
       .skip(perPage * page)
       .sort(sortPayload)
@@ -61,10 +61,10 @@ module.exports = {
         message: error.details[0].message,
       });
 
-    const nameExist = await ProductSchema.findOne({
+    const nameExist = await ProductModel.findOne({
       productName: req.body.productName,
     });
-    const shortCodeExist = await ProductSchema.findOne({
+    const shortCodeExist = await ProductModel.findOne({
       productShortCode: req.body.productShortCode,
     });
 
@@ -74,7 +74,7 @@ module.exports = {
         message: "name or short code already exist",
       });
 
-    const newProduct = new ProductSchema(req.body);
+    const newProduct = new ProductModel(req.body);
 
     await newProduct
       .save()
@@ -103,7 +103,7 @@ module.exports = {
     if (!req.body._id)
       return res.json({ isSuccessful: false, message: "id is required" });
 
-    ProductSchema.findByIdAndUpdate(
+      ProductModel.findByIdAndUpdate(
       req.body._id,
       { ...req.body },
       { upsert: true, new: true }
@@ -126,7 +126,7 @@ module.exports = {
     if (!req.body._id)
       return res.json({ isSuccessful: false, message: "id is required" });
 
-    ProductSchema.findByIdAndDelete(req.body._id)
+      ProductModel.findByIdAndDelete(req.body._id)
       .then((product) => {
         return res.json({
           isSuccessful: true,

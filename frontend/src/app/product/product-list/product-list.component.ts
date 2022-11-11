@@ -30,7 +30,7 @@ export class ProductListComponent implements OnInit {
   {display:'Delete',value:'delete'},
 ]
   displayedColumns: string[] = ['productName', 'category', 'price', 'quantity','origin','edit', 'delete'];
-  pageSizeOptions: number[] = [2,5,10, 25, 100]
+  pageSizeOptions: number[] = [5,10, 25, 100]
   isLoadingResults: boolean = false;
 
   tablePayload: dataTable = {
@@ -38,7 +38,7 @@ export class ProductListComponent implements OnInit {
     dataSources: [],
     displayedColumns: this.displayedColumns,
     displayedCOlumnsSettings: this.displayColumns,
-    pageSizeOptions: [2,5,10, 25, 100],
+    pageSizeOptions: [5,10, 25, 100],
   }
 
   dataConfig: dataConfig = { key:'price',order:'asc',perPage:5,page:0}
@@ -46,6 +46,9 @@ export class ProductListComponent implements OnInit {
   constructor(private backendService:BackendService) { 
     
     this.getTransformedData(this.dataConfig)
+    this.backendService.transformedProducts.subscribe((products:Product[])=>{
+      this.tablePayload.dataSources = products
+    })
 
 
   }

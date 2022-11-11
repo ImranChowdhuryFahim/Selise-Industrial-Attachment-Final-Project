@@ -12,6 +12,9 @@ import { Response } from '../models/response';
 })
 export class BackendService {
   private cartItemsCount:BehaviorSubject<number> = new BehaviorSubject<number>(0)
+  cartItems:BehaviorSubject<CartFull[]> = new BehaviorSubject<CartFull[]>([])
+  products:BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([])
+  transformedProducts:BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([])
 
   BASE_URL = ''
 
@@ -35,6 +38,32 @@ export class BackendService {
   getProducts() : Observable<Response>
   {
     return this.http.get<Response>(this.BASE_URL+'api/get-products/')
+  }
+
+  updateAllState(){
+    let dataConfig: dataConfig = { key:'price',order:'asc',perPage:5,page:0}
+
+    this.getProducts().subscribe((res:Response)=>{
+      if(res.isSuccessful)
+      {
+        this.products.next(res.products as Product[])
+      }
+      
+    })
+
+    this.getPaginatedandSortedValue(dataConfig).subscribe((res)=>{
+      if(res.isSuccessful)
+      {
+        this.transformedProducts.next(res.products as Product[])
+      }
+    })
+
+    this.getCartItems().subscribe((res:Response)=>{
+      if(res.isSuccessful)
+      {
+        this.cartItems.next(res.cartItems as CartFull[])
+      }
+    })
   }
 
 

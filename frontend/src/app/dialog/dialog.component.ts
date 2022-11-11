@@ -47,6 +47,7 @@ export class DialogComponent implements OnInit {
       this.isLoading = false;
       this.internalService.openSnackBar(response.message,2,'red-snackbar') 
     }
+    this.backendService.updateAllState()
   }
 
   async deleteCart(res:(Cart|Product)[])
@@ -65,6 +66,7 @@ export class DialogComponent implements OnInit {
       this.isLoading = false;
       this.internalService.openSnackBar(response.message,2,'red-snackbar') 
     }
+    this.backendService.updateAllState()
   }
 
   calculatePrice(cartItems:CartFull[])
