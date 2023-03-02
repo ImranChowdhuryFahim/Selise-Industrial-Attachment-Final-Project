@@ -1,4 +1,0 @@
-<div class="display-cart">
-    <mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>
-    <app-card *ngFor="let cart of cartItems" [cardPayload]="cart.productId" [editCart]="true" [quantity]="cart.quantity" (editEvent)="editCart($event)" (deleteEvent)="deleteCart($event)"></app-card>
-</div>
